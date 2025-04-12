@@ -5,10 +5,10 @@ import { CalorieChartProps } from '../types';
 
 const screenWidth = Dimensions.get('window').width;
 
-const CalorieChart: React.FC<CalorieChartProps> = ({ data }) => (
+const CalorieChart: React.FC<CalorieChartProps> = ({ data , labels}) => (
   <LineChart
     data={{
-      labels: ['-6', '-5', '-4', '-3', '-2', '-1', 'Today'],
+      labels,
       datasets: [{ data }]
     }}
     width={screenWidth - 40}

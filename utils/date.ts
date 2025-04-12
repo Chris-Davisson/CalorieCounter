@@ -12,3 +12,8 @@ export const getTodayKey = (): string => {
     return dates;
   };
   
+  export const formatDateShort = (dateString: string): string => {
+    const date = new Date(dateString);
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  };
+  

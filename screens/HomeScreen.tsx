@@ -18,7 +18,7 @@ import {
   setCaloriesForDate,
   getLast7Days
 } from '../services/db';
-import { getTodayKey, getPastDates } from '../utils/date';
+import { getTodayKey, getPastDates , formatDateShort } from '../utils/date';
 
 import CalorieChart from '../components/CalorieChart';
 import CalorieButtons from '../components/CalorieButtons';
@@ -26,7 +26,7 @@ import CalorieButtons from '../components/CalorieButtons';
 const HomeScreen = () => {
   const [calories, setCalories] = useState<number>(0);
   const [weeklyData, setWeeklyData] = useState<number[]>([0, 0, 0, 0, 0, 0, 0]);
-
+  const dateLabels = getPastDates(7).map(date => formatDateShort(date));
   const [modalVisible, setModalVisible] = useState(false);
   const [pendingDelta, setPendingDelta] = useState<number>(0);
   const [inputValue, setInputValue] = useState('');
@@ -51,7 +51,7 @@ const HomeScreen = () => {
       >
         <ScrollView contentContainerStyle={styles.container}>
           <Text style={styles.title}>Calorie Counter</Text>
-          <CalorieChart data={weeklyData} />
+          <CalorieChart data={weeklyData} labels={dateLabels}/>
           <Text style={styles.calories}>{calories} Calories Today</Text>
 
           <CalorieButtons
@@ -82,7 +82,7 @@ const HomeScreen = () => {
                   onChangeText={setInputValue}
                   autoFocus
                   returnKeyType="done"
-                  blurOnSubmit
+                  blurOnSubmit={true}
                   onSubmitEditing={() => {
                     const value = parseInt(inputValue);
                     if (!isNaN(value)) {

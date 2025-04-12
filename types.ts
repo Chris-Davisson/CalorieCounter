@@ -10,5 +10,6 @@ export interface CalorieButtonsProps {
   
   export interface CalorieChartProps {
     data: number[];
+    labels: string[];
   }
   
