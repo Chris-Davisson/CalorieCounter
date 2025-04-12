@@ -22,6 +22,8 @@ import { getTodayKey, getPastDates , formatDateShort } from '../utils/date';
 
 import CalorieChart from '../components/CalorieChart';
 import CalorieButtons from '../components/CalorieButtons';
+import { Keyboard } from 'react-native';
+
 
 const HomeScreen = () => {
   const [calories, setCalories] = useState<number>(0);
@@ -37,6 +39,22 @@ const HomeScreen = () => {
     setWeeklyData(getLast7Days(getPastDates(7)));
   }, []);
 
+  useEffect(() => {
+    const keyboardListener = Keyboard.addListener('keyboardDidHide', () => {
+
+      const value = parseInt(inputValue);
+      if (!isNaN(value) && modalVisible) {
+        updateCalories(calories + pendingDelta * value);
+        setInputValue('');
+        setModalVisible(false);
+      }
+    });
+  
+    return () => {
+      keyboardListener.remove();
+    };
+  }, [inputValue, pendingDelta, modalVisible]);
+  
   const updateCalories = (newVal: number) => {
     setCalories(newVal);
     setCaloriesForDate(getTodayKey(), newVal);
@@ -83,16 +101,9 @@ const HomeScreen = () => {
                   autoFocus
                   returnKeyType="done"
                   blurOnSubmit={true}
-                  onSubmitEditing={() => {
-                    const value = parseInt(inputValue);
-                    if (!isNaN(value)) {
-                      updateCalories(calories + pendingDelta * value);
-                      setInputValue('');
-                      setModalVisible(false);
-                    }
-                  }}
+                  onSubmitEditing={Keyboard.dismiss}
                 />
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.modalButton}
                   onPress={() => {
                     const value = parseInt(inputValue);
@@ -104,7 +115,7 @@ const HomeScreen = () => {
                   }}
                 >
                   <Text style={styles.modalButtonText}>OK</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
           </Modal>
